@@ -23,7 +23,7 @@ crossPaths := false
 
 // Default main class to run : sbt run
 // the jar can be directly run with 'java -jar' command.
-mainClass in (Compile, run) := Some("PUT MAIN CLASS HERE")
+mainClass in(Compile, run) := Some("PUT MAIN CLASS HERE")
 
 // For maven generated pom.
 pomExtra :=
@@ -54,6 +54,7 @@ val apache_commons_lang: ModuleID = "org.apache.commons" % "commons-lang3" % "3.
 val weblogic_full_client = "bea" % "wlfullclient" % "10.3.2"
 
 val junit: ModuleID = "junit" % "junit" % "4.11" % "test"
+val scalatest: ModuleID = "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
 
 
 
@@ -62,5 +63,6 @@ libraryDependencies ++= Seq(
   apache_commons_lang,
   weblogic_full_client,
   // Test dependencies
-  junit
+  junit,
+  scalatest
 )
