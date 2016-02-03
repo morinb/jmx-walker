@@ -23,7 +23,7 @@ autoScalaLibrary := false
 
 // Default main class to run : sbt run
 // the jar can be directly run with 'java -jar' command.
-mainClass in (Compile, run) := Some("<PUT MAIN CLASS HERE>")
+mainClass in (Compile, run) := Some("PUT MAIN CLASS HERE")
 
 // For maven generated pom.
 pomExtra :=
@@ -41,7 +41,7 @@ pomExtra :=
           </execution>
         </executions>
         <configuration>
-          <mainClass><PUT MAIN CLASS HERE></mainClass>
+          <mainClass>PUT MAIN CLASS HERE</mainClass>
         </configuration>
       </plugin>
     </plugins>
