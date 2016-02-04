@@ -302,7 +302,12 @@ object JmxWalkerMain {
       println(s"\nDisplaying $startIndex to ${startIndex + pageSize} / ${names.size} items")
       // Display the next pageSize items
       for (i <- startIndex until startIndex + pageSize) {
-        println(s"\n $BRIGHT_WHITE${names(i)._2}$DEFAULT - ${names(i)._1.getCanonicalName}")
+        val name: String = names(i)._1.getCanonicalName
+        val colorizedName = highlight match {
+          case None => name
+          case Some(string) => name.replaceAll(highlight.get, BRIGHT_MAGENTA + highlight.get + DEFAULT)
+        }
+        println(s"\n $BRIGHT_WHITE${names(i)._2}$DEFAULT - $colorizedName")
       }
       typeEnterKeyToContinueOrQToAbort match {
         case None =>

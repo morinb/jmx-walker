@@ -1,4 +1,4 @@
-import org.apache.ivy.core.module.id.ModuleId
+
 
 // Project name (artifact name in Maven)
 name := "jmx-walker"
@@ -32,6 +32,20 @@ pomExtra :=
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.2.1</version>
@@ -48,6 +62,18 @@ pomExtra :=
       </plugin>
     </plugins>
   </build>
+    <scm>
+      <connection>scm:git:http://atpds4.fr.net.intra/bmo/jmx-walker.git</connection>
+      <developerConnection>scm:git:http://atpds4.fr.net.intra/bmo/jmx-walker.git</developerConnection>
+      <tag>HEAD</tag>
+    </scm>
+    <distributionManagement>
+      <repository>
+        <id>ATP-FRAMEWORKS</id>
+        <name>All Nexus Content</name>
+        <url>http://atpds11.fr.net.intra:8080/nexus/content/repositories/ATP-FRAMEWORKS/</url>
+      </repository>
+    </distributionManagement>
 
 
 // library dependencies. (organization name) % (project name) % (version) [% (test)]
