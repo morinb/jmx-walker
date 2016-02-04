@@ -23,7 +23,7 @@ object ClassUtil {
     * </pre>
     */
   @tailrec
-  def convert(classRepresentation: String, prefix: String = "", suffix: String = ""): String = {
+  def convert(classRepresentation: String, prefix: String = "", suffix: String = "", short:Boolean = true): String = {
     if (classRepresentation startsWith "[") {
       if (classRepresentation.startsWith("[L")) {
         convert(classRepresentation.substring(2, classRepresentation.length - 1), "Array[" + prefix, suffix + "]")
@@ -40,7 +40,7 @@ object ClassUtil {
         case "I" => "Int"
         case "J" => "Long"
         case "S" => "Short"
-        case string => if (string.contains(".")) {
+        case string => if (short && string.contains(".")) {
           string.substring(string.lastIndexOf(".")+1)
         }
         else {

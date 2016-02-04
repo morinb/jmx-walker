@@ -9,7 +9,7 @@ import org.scalatest.FunSuite
 class ClassUtilTest extends FunSuite {
 
   test("Array of ObjectName") {
-    assert("Array[javax.management.ObjectName]" === ClassUtil.convert("[Ljavax.management.ObjectName;"))
+    assert("Array[ObjectName]" === ClassUtil.convert("[Ljavax.management.ObjectName;"))
   }
 
   test("Array of Array of ... of Int") {
@@ -20,8 +20,11 @@ class ClassUtilTest extends FunSuite {
     assert("Array[Array[Long]]" === ClassUtil.convert("[[J"))
   }
 
-  test("java.lang.Long") {
+  test("java.lang.Long short") {
     assert("Long" === ClassUtil.convert("java.lang.Long"))
   }
 
+  test("java.lang.Long not short") {
+    assert("java.lang.Long" === ClassUtil.convert("java.lang.Long", short = false))
+  }
 }
