@@ -2,6 +2,7 @@ package com.bnpparibas.grp.jmx
 
 import javax.management.ObjectName
 
+import com.bnpparibas.grp.jmx.menu.{Menu, MenuItem, Separator}
 import jline.console.ConsoleReader
 import jline.console.completer.{CandidateListCompletionHandler, StringsCompleter}
 
@@ -34,39 +35,27 @@ object JmxWalkerMain {
       |      \_/\_/ |__|__|_____|__|\_|_____|__|\_|
       |                                            
     """.stripMargin
-  val reader = new ConsoleReader()
+  implicit val reader = new ConsoleReader()
 
   var completer = new StringsCompleter()
   reader.setCompletionHandler(new CandidateListCompletionHandler())
 
   def main(args: Array[String]): Unit = {
+    val startMenu = new Menu(banner)
+    startMenu += new MenuItem("1", "Connect to an environment", "-")(() => {
+      displayConnectLoop()
+      true
+    })
+    startMenu += Separator
+    startMenu += new MenuItem("q", "Quit the application", "-")(() => {
+      println("Exiting...")
+      sys.exit(0)
+    })
 
-    if (args.length == 0) {
-      displayMenuLoop()
-    }
 
-  }
 
-  def displayMenuLoop(): Unit = {
-    var loop: Boolean = true
 
-    do {
-      printBanner()
-      println(
-        """
-          | 1 - Connect to an environment
-          |
-          | q - Quit the application
-        """.
-          stripMargin)
-
-      val line = readLine(Some("Your choice"), None, Some("1"))
-      if ("q" == line) {
-        loop = false
-      } else if ("1" == line) {
-        displayConnectLoop()
-      }
-    } while (loop)
+    startMenu.loop()
 
   }
 
@@ -104,40 +93,70 @@ object JmxWalkerMain {
   }
 
   def displayWalkerLoop(walker: JmxWalker, names: List[ObjectName]): Unit = {
-    var loop = true
 
-    do {
-      printBanner()
-      println(
-        """
-          | 1 - List all MBeans
-          | 2 - List all MBeans that contains a string
-          | 3 - Info of a MBean by its name 
-          | 4 - Info of a MBean by its number
-          |
-          | q - Quit this Menu
-        """.stripMargin)
+    val walkerMenu = new Menu(banner + s"\n  [${walker.credentials}]")
 
-      val line = readLine(Some("Your choice"))
-      try {
-        line match {
-          case "1" => printAllMBeans(names.zipWithIndex)
-          case "2" => val string = readLine(Some("String"))
-            printAllMBeans(names.zipWithIndex.filter(tuple => tuple._1.getCanonicalName.contains(string)))
-          case "3" => val mbeanName = readLine(Some("MBean Name"))
-            displayMBeanInfoDetailsLoop(walker, mbeanName)
-          case "4" => val number = readLine(Some("MBean Number"))
-            val name = names(number.toInt).getCanonicalName
-            displayMBeanInfoDetailsLoop(walker, name)
-          case "q" => loop = false
-          case _ =>
-        }
-      } catch {
-        case e: Exception => println("An exception occured : ")
-          e.printStackTrace()
-          typeEnterKeyToContinue()
-      }
-    } while (loop)
+    walkerMenu += new MenuItem("1", "List all MBeans", "-")(() => {
+      printAllMBeans(names.zipWithIndex)
+      true
+    })
+    walkerMenu += new MenuItem("2", "List all MBeans that contains a string", "-")(() => {
+      val string = readLine(Some("String"))
+      printAllMBeans(names.zipWithIndex.filter(tuple => tuple._1.getCanonicalName.contains(string)))
+      true
+    })
+    walkerMenu += new MenuItem("3", "Info of a MBean by its name ", "-")(() => {
+      val mbeanName = readLine(Some("MBean Name"))
+      displayMBeanInfoDetailsLoop(walker, mbeanName)
+      true
+    })
+    walkerMenu += new MenuItem("4", "Info of a MBean by its number", "-")(() => {
+      val number = readLine(Some("MBean Number"))
+      val name = names(number.toInt).getCanonicalName
+      displayMBeanInfoDetailsLoop(walker, name)
+      true
+    })
+    walkerMenu += Separator
+    walkerMenu += new MenuItem("q", "Quit this Menu", "-")(() => {
+      false
+    })
+
+    walkerMenu.loop()
+    /*
+        var loop = true
+    
+        do {
+          printBanner()
+          println(
+            """
+              | 1 - List all MBeans
+              | 2 - List all MBeans that contains a string
+              | 3 - Info of a MBean by its name 
+              | 4 - Info of a MBean by its number
+              |
+              | q - Quit this Menu
+            """.stripMargin)
+    
+          val line = readLine(Some("Your choice"))
+          try {
+            line match {
+              case "1" => printAllMBeans(names.zipWithIndex)
+              case "2" => val string = readLine(Some("String"))
+                printAllMBeans(names.zipWithIndex.filter(tuple => tuple._1.getCanonicalName.contains(string)))
+              case "3" => val mbeanName = readLine(Some("MBean Name"))
+                displayMBeanInfoDetailsLoop(walker, mbeanName)
+              case "4" => val number = readLine(Some("MBean Number"))
+                val name = names(number.toInt).getCanonicalName
+                displayMBeanInfoDetailsLoop(walker, name)
+              case "q" => loop = false
+              case _ =>
+            }
+          } catch {
+            case e: Exception => println("An exception occured : ")
+              e.printStackTrace()
+              typeEnterKeyToContinue()
+          }
+        } while (loop)*/
   }
 
   def displayMBeanInfoDetailsLoop(walker: JmxWalker, mbeanName: String): Unit = {
@@ -196,7 +215,7 @@ object JmxWalkerMain {
                   case _ =>
                     val value = walker.getConnection.getAttribute(new ObjectName(mbeanName), attrName)
                     println(s"\n$attrName = $value\n")
-                    
+
                 }
               } catch {
                 case e: Exception => println("Invalid attribute name !")
@@ -312,6 +331,23 @@ object JmxWalkerMain {
         read
       }
     }
+  }
+
+  def showMenu(entries: List[Option[(String, String)]], defaultValue: Option[String], completions: List[String] = Nil): String = {
+    for (entry <- entries) {
+      entry match {
+        case None => println
+        case Some(item) => println(s" ${item._1} - ${item._2}")
+      }
+    }
+
+    reader.getCompleters.foreach(c => reader.removeCompleter(c))
+    reader.addCompleter(new StringsCompleter(completions))
+    var line = ""
+    do {
+      line = readLine(Some("Your choice"), None, defaultValue)
+    } while (line.isEmpty)
+    line
   }
 
 }
