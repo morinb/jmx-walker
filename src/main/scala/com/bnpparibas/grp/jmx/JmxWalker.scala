@@ -6,6 +6,8 @@ import javax.management.ObjectName
 import javax.management.remote.{JMXConnector, JMXConnectorFactory, JMXServiceURL}
 import javax.naming.Context
 
+import com.bnpparibas.grp.jmx.AnsiColor._
+
 import scala.collection.JavaConversions._
 
 /**
@@ -21,6 +23,7 @@ class JmxWalker(val protocol: String,
   var connector: Option[JMXConnector] = None
 
   def connect(): Unit = {
+    println(s"${CYAN}Connecting to $credentials${DEFAULT}")
     val serviceURL = new JMXServiceURL(protocol.toString, credentials.server, credentials.port, if (admin) ADMIN_RUNTIME else RUNTIME)
     val context = Map(
       Context.SECURITY_PRINCIPAL -> credentials.login,
@@ -43,6 +46,7 @@ class JmxWalker(val protocol: String,
 
   def disconnect(): Unit = {
     if (connected) {
+      println(s"${CYAN}Disconnecting from $credentials$DEFAULT")
       connector.get.close()
     }
     connector = None
