@@ -1,10 +1,12 @@
+import org.apache.ivy.core.module.id.ModuleId
+
 // Project name (artifact name in Maven)
 name := "jmx-walker"
 
 // organization name (e.g., the package name of the project)
 organization := "com.bnpparibas.grp.jmx"
 
-version := "0.1.0-SNAPSHOT"
+version := "0.1.0"
 
 // project description
 description := "Application that allow the discovery of a JMX Tree on a server."
@@ -19,11 +21,11 @@ publishTo := Some(Resolver.file("file", new File("C:\\workspace\\maven-3.0.4\\re
 crossPaths := false
 
 // This forbids including Scala related libraries into the dependency
-autoScalaLibrary := false
+// autoScalaLibrary := false
 
 // Default main class to run : sbt run
 // the jar can be directly run with 'java -jar' command.
-mainClass in (Compile, run) := Some("PUT MAIN CLASS HERE")
+mainClass in(Compile, run) := Some("com.bnpparibas.grp.jmx.JmxWalkerMain")
 
 // For maven generated pom.
 pomExtra :=
@@ -41,17 +43,29 @@ pomExtra :=
           </execution>
         </executions>
         <configuration>
-          <mainClass>PUT MAIN CLASS HERE</mainClass>
+          <mainClass>com.bnpparibas.grp.jmx.JmxWalkerMain</mainClass>
         </configuration>
       </plugin>
     </plugins>
   </build>
 
 
-// library dependencies. (organization name) % (project name) % (version)
+// library dependencies. (organization name) % (project name) % (version) [% (test)]
+val guava: ModuleID = "com.google.guava" % "guava" % "19.0"
+val apache_commons_lang: ModuleID = "org.apache.commons" % "commons-lang3" % "3.4"
+val weblogic_full_client = "bea" % "wlfullclient" % "10.3.2"
+
+val junit: ModuleID = "junit" % "junit" % "4.11" % "test"
+val scalatest: ModuleID = "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
+val jline: ModuleID = "jline" % "jline" % "2.13"
+
+
 libraryDependencies ++= Seq(
-  "com.google.guava" % "guava" % "19.0",
-  "org.apache.commons" % "commons-lang3" % "3.4",
+  guava,
+  apache_commons_lang,
+  weblogic_full_client,
+  jline,
   // Test dependencies
-  "junit" % "junit" % "4.11"
+  junit,
+  scalatest
 )
