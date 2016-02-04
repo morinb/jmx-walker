@@ -6,7 +6,7 @@ name := "jmx-walker"
 // organization name (e.g., the package name of the project)
 organization := "com.bnpparibas.grp.jmx"
 
-version := "0.1.0-SNAPSHOT"
+version := "0.1.0"
 
 // project description
 description := "Application that allow the discovery of a JMX Tree on a server."
