@@ -1,3 +1,5 @@
+import org.apache.ivy.core.module.id.ModuleId
+
 // Project name (artifact name in Maven)
 name := "jmx-walker"
 
@@ -23,7 +25,7 @@ crossPaths := false
 
 // Default main class to run : sbt run
 // the jar can be directly run with 'java -jar' command.
-mainClass in(Compile, run) := Some("PUT MAIN CLASS HERE")
+mainClass in(Compile, run) := Some("com.bnpparibas.grp.jmx.JmxWalkerMain")
 
 // For maven generated pom.
 pomExtra :=
@@ -41,7 +43,7 @@ pomExtra :=
           </execution>
         </executions>
         <configuration>
-          <mainClass>PUT MAIN CLASS HERE</mainClass>
+          <mainClass>com.bnpparibas.grp.jmx.JmxWalkerMain</mainClass>
         </configuration>
       </plugin>
     </plugins>
@@ -55,13 +57,14 @@ val weblogic_full_client = "bea" % "wlfullclient" % "10.3.2"
 
 val junit: ModuleID = "junit" % "junit" % "4.11" % "test"
 val scalatest: ModuleID = "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
-
+val jline: ModuleID = "jline" % "jline" % "2.13"
 
 
 libraryDependencies ++= Seq(
   guava,
   apache_commons_lang,
   weblogic_full_client,
+  jline,
   // Test dependencies
   junit,
   scalatest
