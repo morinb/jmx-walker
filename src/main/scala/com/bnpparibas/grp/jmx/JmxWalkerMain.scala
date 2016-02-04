@@ -287,7 +287,7 @@ object JmxWalkerMain {
 
     if (pageSize + startIndex >= names.size) {
       // Display last item
-      println(s"\n${CYAN}Displaying${DEFAULT} $startIndex ${CYAN}to${DEFAULT} ${BRIGHT_WHITE}${names.size}${DEFAULT} ${CYAN}-${DEFAULT} ${BRIGHT_WHITE}${names.size}${DEFAULT} ${CYAN}items${DEFAULT}")
+      println(s"\n${CYAN}Displaying$DEFAULT $startIndex ${CYAN}to$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT $CYAN-$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT ${CYAN}items$DEFAULT")
       for (i <- startIndex until names.size) {
         val name: String = names(i)._1.getCanonicalName
         val colorizedName = highlight match {
@@ -299,7 +299,7 @@ object JmxWalkerMain {
       typeKeyToContinue()
     } else {
 
-      println(s"\n${CYAN}Displaying${DEFAULT} ${BRIGHT_WHITE}${startIndex + pageSize}${DEFAULT} ${CYAN}to${DEFAULT} ${BRIGHT_WHITE}${names.size}${DEFAULT} ${CYAN}-${DEFAULT} ${BRIGHT_WHITE}${names.size}${DEFAULT} ${CYAN}items${DEFAULT}")
+      println(s"\n${CYAN}Displaying$DEFAULT $BRIGHT_WHITE${startIndex + pageSize}$DEFAULT ${CYAN}to$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT $CYAN-$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT ${CYAN}items$DEFAULT")
 
       // Display the next pageSize items
       for (i <- startIndex until startIndex + pageSize) {
