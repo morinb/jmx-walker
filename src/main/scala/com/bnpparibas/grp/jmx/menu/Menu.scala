@@ -13,7 +13,7 @@ import scala.collection.mutable
   *
   * @author morinb.
   */
-class Menu(val name: String)(implicit val reader: ConsoleReader) {
+class Menu(val name: String, var defaultSelection: Option[String] = None)(implicit val reader: ConsoleReader) {
   var _items: mutable.MutableList[MenuItem] = mutable.MutableList()
 
   def +=(menuItem: MenuItem) = _items += menuItem
@@ -28,8 +28,10 @@ class Menu(val name: String)(implicit val reader: ConsoleReader) {
 
   def items() = _items.toList
 
-  private[this] def displayMenuToUser(): Unit = {
-    clearScreen()
+  private[this] def displayMenuToUser(clear: Boolean = true): Unit = {
+    if (clear) {
+      clearScreen()
+    }
     println(name)
     println
     for (item <- _items) {
@@ -38,7 +40,7 @@ class Menu(val name: String)(implicit val reader: ConsoleReader) {
     println
   }
 
-  def loop() = {
+  def loop(clear: Boolean = true, redisplayMenu: Boolean = true) = {
     displayMenuToUser()
     reader.getCompleters.foreach(
       completer => reader.removeCompleter(completer)
@@ -46,11 +48,13 @@ class Menu(val name: String)(implicit val reader: ConsoleReader) {
     reader.addCompleter(new StringsCompleter(_items.map(i => i.prefix).toList))
     var loop = true
     do {
-      val line = readLine(Some("Your Choice"))
+      val line = readLine(Some("Your Choice"), None, defaultSelection).trim
       _items.toList.search(mi => mi.prefix == line) match {
         case Some(mi) => val stayInMenu = mi.action()
-          if(stayInMenu) {
-            displayMenuToUser()
+          if (stayInMenu) {
+            if(redisplayMenu) {
+              displayMenuToUser(clear)
+            }
           } else {
             loop = false
           }
