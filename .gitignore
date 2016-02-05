@@ -81,6 +81,8 @@ nbactions.xml
 
 .metadata
 bin/
+!/sbt/bin
+
 tmp/
 *.tmp
 *.bak

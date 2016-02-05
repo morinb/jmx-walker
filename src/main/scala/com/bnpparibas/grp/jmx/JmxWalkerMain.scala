@@ -68,9 +68,9 @@ object JmxWalkerMain {
       val admin = readLine(Some("Is this an admin instance (Yes/No)"), None, Some("No"))
       val isAdmin = admin.toLowerCase.matches("[yY][eE]?[sS]?")
       val protocol = readLine(Some("What is the server protocol (t3, iiop, rmi)"), None, Some("t3"))
-      val port = readLine(Some("What is the server port"), None, Some("9080"))
+      val port = readLine(Some("What is the server port"), None, if(isAdmin) Some("9091") else Some("9080"))
       val login = readLine(Some("What is the server login"), None, Some("weblogic"))
-      val password = readLine(Some("What is the server password"), Some('\0'), Some("bnpparibas!")) // don't ever display password
+      val password = readLine(Some("What is the server password"), Some('\0')) // don't ever display password
 
       try {
         val creds = new Credentials(server, port.toInt, login, password.toCharArray)
@@ -287,7 +287,7 @@ object JmxWalkerMain {
 
     if (pageSize + startIndex >= names.size) {
       // Display last item
-      println(s"\n${CYAN}Displaying${DEFAULT} $startIndex ${CYAN}to${DEFAULT} ${BRIGHT_WHITE}${names.size}${DEFAULT} ${CYAN}-${DEFAULT} ${BRIGHT_WHITE}${names.size}${DEFAULT} ${CYAN}items${DEFAULT}")
+      println(s"\n${CYAN}Displaying$DEFAULT $startIndex ${CYAN}to$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT $CYAN-$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT ${CYAN}items$DEFAULT")
       for (i <- startIndex until names.size) {
         val name: String = names(i)._1.getCanonicalName
         val colorizedName = highlight match {
@@ -299,7 +299,7 @@ object JmxWalkerMain {
       typeKeyToContinue()
     } else {
 
-      println(s"\n${CYAN}Displaying${DEFAULT} ${BRIGHT_WHITE}${startIndex + pageSize}${DEFAULT} ${CYAN}to${DEFAULT} ${BRIGHT_WHITE}${names.size}${DEFAULT} ${CYAN}-${DEFAULT} ${BRIGHT_WHITE}${names.size}${DEFAULT} ${CYAN}items${DEFAULT}")
+      println(s"\n${CYAN}Displaying$DEFAULT $BRIGHT_WHITE${startIndex + pageSize}$DEFAULT ${CYAN}to$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT $CYAN-$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT ${CYAN}items$DEFAULT")
 
       // Display the next pageSize items
       for (i <- startIndex until startIndex + pageSize) {

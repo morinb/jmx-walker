@@ -1,0 +1,21 @@
+# Set the java args to high
+-Xms256m
+-Xmx512m
+
+-XX:MaxPermSize=256m
+
+-XX:ReservedCodeCacheSize=128m
+
+
+
+# Set the extra SBT options
+
+-Dsbt.log.format=true
+# -Dhttp.proxyHost=ncproxy
+# -Dhttp.proxyPort=8080
+# -Dhttp.proxyUser=
+# -Dhttp.proxyPassword=
+# -Dhttps.proxyHost=ncproxy
+# -Dhttps.proxyPort=8080
+# -Dhttps.proxyUser=
+# -Dhttps.proxyPassword=
