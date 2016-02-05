@@ -5,7 +5,7 @@ name := "jmx-walker"
 // organization name (e.g., the package name of the project)
 organization := "com.github.morinb"
 
-version := "0.1.5-SNAPSHOT"
+version := "0.1.5"
 
 // project description
 description := "Application that allow the discovery of a JMX Tree on a server."
