@@ -1,15 +1,16 @@
-package com.bnpparibas.grp.jmx
+package com.github.morinb.jmx.walker
 
 import javax.management.{MBeanOperationInfo, ObjectName}
 
-import com.bnpparibas.grp.jmx.AnsiColor._
-import com.bnpparibas.grp.jmx.ClassUtil.convert
-import com.bnpparibas.grp.jmx.menu.{Menu, MenuItem, Separator}
+import com.github.morinb.jmx.walker.AnsiColor._
+import com.github.morinb.jmx.walker.ClassUtil.convert
+import com.github.morinb.jmx.walker.menu.{Menu, MenuItem, Separator}
 import jline.console.ConsoleReader
 import jline.console.completer.{CandidateListCompletionHandler, StringsCompleter}
 
 import scala.annotation.tailrec
 import scala.collection.JavaConversions._
+
 
 
 /**
@@ -18,7 +19,7 @@ import scala.collection.JavaConversions._
   */
 object JmxWalkerMain {
   val pagination = 20
-  // let the parenthesis arout the multistring else it won't work !
+  // let the parenthesis around the multistring else it won't work !
   val banner: String = BRIGHT_GREEN + (
     """
       |  ____  ___ ___ __ __                       
@@ -64,7 +65,7 @@ object JmxWalkerMain {
     reader.getCompleters.foreach(c => reader.removeCompleter(c))
     do {
       printBanner()
-      val server = readLine(Some("What is the server address"), None, Some("acetp-ude-m1"))
+      val server = readLine(Some("What is the server address"), None)
       val admin = readLine(Some("Is this an admin instance (Yes/No)"), None, Some("No"))
       val isAdmin = admin.toLowerCase.matches("[yY][eE]?[sS]?")
       val protocol = readLine(Some("What is the server protocol (t3, iiop, rmi)"), None, Some("t3"))
@@ -75,9 +76,9 @@ object JmxWalkerMain {
       try {
         val creds = new Credentials(server, port.toInt, login, password.toCharArray)
 
-        println(s"Trying to connect ${if (isAdmin) s" $RED(admin)$DEFAULT " else ""} to $creds ...")
         val walker = new JmxWalker(protocol, creds, isAdmin)
         walker.connect()
+        println(s"${BRIGHT_GREEN}Connected !$DEFAULT")
         val mbeanNames = asScalaSet(walker.getConnection.queryNames(null, null)).toList
         displayWalkerLoop(walker, mbeanNames)
         walker.disconnect()

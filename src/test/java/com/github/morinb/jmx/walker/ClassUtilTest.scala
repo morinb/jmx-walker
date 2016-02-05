@@ -1,4 +1,4 @@
-package com.bnpparibas.grp.jmx
+package com.github.morinb.jmx.walker
 
 import org.scalatest.FunSuite
 

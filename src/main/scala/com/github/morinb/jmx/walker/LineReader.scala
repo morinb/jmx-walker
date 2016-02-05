@@ -1,6 +1,6 @@
-package com.bnpparibas.grp.jmx
+package com.github.morinb.jmx.walker
 
-import com.bnpparibas.grp.jmx.AnsiColor._
+import com.github.morinb.jmx.walker.AnsiColor._
 import jline.console.ConsoleReader
 
 import scala.annotation.tailrec
