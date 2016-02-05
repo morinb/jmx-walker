@@ -68,9 +68,9 @@ object JmxWalkerMain {
       val admin = readLine(Some("Is this an admin instance (Yes/No)"), None, Some("No"))
       val isAdmin = admin.toLowerCase.matches("[yY][eE]?[sS]?")
       val protocol = readLine(Some("What is the server protocol (t3, iiop, rmi)"), None, Some("t3"))
-      val port = readLine(Some("What is the server port"), None, Some("9080"))
+      val port = readLine(Some("What is the server port"), None, if(isAdmin) Some("9091") else Some("9080"))
       val login = readLine(Some("What is the server login"), None, Some("weblogic"))
-      val password = readLine(Some("What is the server password"), Some('\0'), Some("bnpparibas!")) // don't ever display password
+      val password = readLine(Some("What is the server password"), Some('\0')) // don't ever display password
 
       try {
         val creds = new Credentials(server, port.toInt, login, password.toCharArray)
