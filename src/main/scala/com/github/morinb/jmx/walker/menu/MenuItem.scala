@@ -1,4 +1,4 @@
-package com.bnpparibas.grp.jmx.menu
+package com.github.morinb.jmx.walker.menu
 
 /**
   *

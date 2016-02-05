@@ -1,4 +1,4 @@
-package com.bnpparibas.grp.jmx.exception
+package com.github.morinb.jmx.walker.exception
 
 /**
   *

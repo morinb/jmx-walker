@@ -1,9 +1,9 @@
-package com.bnpparibas.grp.jmx.menu
+package com.github.morinb.jmx.walker.menu
 
 
-import com.bnpparibas.grp.jmx.AnsiColor._
-import com.bnpparibas.grp.jmx.LineReader
-import com.bnpparibas.grp.jmx.menu.RichList._
+import com.github.morinb.jmx.walker.AnsiColor._
+import com.github.morinb.jmx.walker.LineReader
+import com.github.morinb.jmx.walker.menu.RichList._
 import jline.console.ConsoleReader
 import jline.console.completer.StringsCompleter
 
