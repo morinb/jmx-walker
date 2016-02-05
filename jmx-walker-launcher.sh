@@ -8,4 +8,4 @@ fi
 cd jmx-walker
 echo "Getting last jmx-walker version"
 git pull origin master
-./sbt/bin/sbt.bat -mem 128 run
+./sbt/bin/sbt -mem 128 run
