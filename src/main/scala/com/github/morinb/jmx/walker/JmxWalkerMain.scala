@@ -313,7 +313,7 @@ object JmxWalkerMain {
       }
       typeEnterKeyToContinueOrQToAbort match {
         case None =>
-        case Some(_) => paginate(names, pageSize, startIndex + pageSize) // Display next 
+        case Some(_) => paginate(names, pageSize, startIndex + pageSize, highlight) // Display next 
       }
 
     }
