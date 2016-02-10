@@ -103,12 +103,18 @@ object JmxWalkerMain {
     })
     walkerMenu += new MenuItem("2", "List all MBeans that contains a string", " - ")(() => {
       val string = readLine(Some("String"))
-      printAllMBeans(names.zipWithIndex.filter(tuple => tuple._1.getCanonicalName.contains(string)), Some(string))
+      println(s"Searching for $GREEN$string$DEFAULT in MBeans")
+      printAllMBeans(names.zipWithIndex.filter(tuple => tuple._1.getCanonicalName.contains(string)), Some(string.replaceAll("\\[", "\\\\[").replaceAll("\\]", "\\\\]")   .replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)"))) //escape some regex char
       true
     })
     walkerMenu += new MenuItem("3", "Info of a MBean by its name ", " - ")(() => {
       val mbeanName = readLine(Some("MBean Name"))
-      displayMBeanInfoDetailsLoop(walker, mbeanName)
+      try {
+        displayMBeanInfoDetailsLoop(walker, mbeanName)
+      }catch {
+        case e:Exception => println(s"Invalid MBean name: $mbeanName")
+          e.printStackTrace()  
+      }
       true
     })
     walkerMenu += new MenuItem("4", "Info of a MBean by its number", " - ")(() => {
@@ -117,12 +123,31 @@ object JmxWalkerMain {
       displayMBeanInfoDetailsLoop(walker, name)
       true
     })
+    walkerMenu += new MenuItem("5", "Search an attribute value", " - ")(() => {
+      val value = readLine(Some("Attribute Value"))
+      println(s"Searching for $GREEN$value$DEFAULT in all attributes value...")
+      for(name <- names) {
+        val infos = walker.getConnection.getMBeanInfo(name)
+        for(attr <- infos.getAttributes) {
+          val string = Option(walker.getConnection.getAttribute(name, attr.getName))
+          val nullSafeString = string match {
+            case None => ""
+            case Some(s) => s.toString
+          }
+          if(nullSafeString.contains(value)) {
+            println(s"$CYAN$name$DEFAULT.$GREEN${attr.getName}$DEFAULT = $BRIGHT_WHITE$string$DEFAULT")
+          }
+        }
+      }
+      true
+    })
     walkerMenu += Separator
     walkerMenu += new MenuItem("q", "Quit this Menu", " - ")(() => {
       false
     })
 
     clearScreen()
+    
     walkerMenu.loop(clear = false, redisplayMenu = true, redisplayName = false)
   }
 
@@ -300,7 +325,7 @@ object JmxWalkerMain {
       typeKeyToContinue()
     } else {
 
-      println(s"\n${CYAN}Displaying$DEFAULT $BRIGHT_WHITE${startIndex + pageSize}$DEFAULT ${CYAN}to$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT $CYAN-$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT ${CYAN}items$DEFAULT")
+      println(s"\n${CYAN}Displaying$DEFAULT $BRIGHT_WHITE${startIndex}$DEFAULT ${CYAN}to$DEFAULT $BRIGHT_WHITE${startIndex + pageSize}$DEFAULT $CYAN-$DEFAULT $BRIGHT_WHITE${names.size}$DEFAULT ${CYAN}items$DEFAULT")
 
       // Display the next pageSize items
       for (i <- startIndex until startIndex + pageSize) {
