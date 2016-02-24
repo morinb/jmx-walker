@@ -123,7 +123,27 @@ object JmxWalkerMain {
       displayMBeanInfoDetailsLoop(walker, name)
       true
     })
-    walkerMenu += new MenuItem("5", "Search an attribute value", " - ")(() => {
+    walkerMenu += new MenuItem("5", "Search an attribute name", " - ")(() => {
+      val value = readLine(Some("Attribute name"))
+      println(s"Searching for $GREEN$value$DEFAULT in all attributes value...")
+      for(name <- names) {
+        val infos = walker.getConnection.getMBeanInfo(name)
+        for(attr <- infos.getAttributes) {
+          val attrname = attr.getName
+          if (attrname.contains(value)) {
+             val string = Option(walker.getConnection.getAttribute(name, attrname))
+             val nullSafeString = string match {
+                case None => ""
+                case Some(s) => s.toString
+             }
+             println(s"$CYAN$name$DEFAULT.$GREEN$attrname$DEFAULT = $BRIGHT_WHITE$string$DEFAULT")
+          }
+        }
+      }
+      true
+    })
+    
+    walkerMenu += new MenuItem("6", "Search an attribute value", " - ")(() => {
       val value = readLine(Some("Attribute Value"))
       println(s"Searching for $GREEN$value$DEFAULT in all attributes value...")
       for(name <- names) {

@@ -19,6 +19,9 @@ publishTo := Some(Resolver.file("file", new File("C:\\workspace\\maven-3.0.4\\re
 // Do not append Scala versions to the generated artifacts
 crossPaths := false
 
+// retrieve project dependencies
+retrieveManaged := true
+
 // This forbids including Scala related libraries into the dependency (for java only projects)
 // autoScalaLibrary := false
 
